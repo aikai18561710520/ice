@@ -16,9 +16,16 @@ export const router = app => {
 
         const str = [token, timestamp, nonce].sort().join('')
         const sha = sha1(str)
+        console.log(sha === signature)
+        if (sha === signature) {
+            ctx.body = echostr
+        } else {
+            ctx.body = 'failed'
+        }
 
-        ctx.body = echostr
     })
 
     // router.post()
+    app.use(router.routes())
+    app.use(router.allowedMethods())
 }
