@@ -3,7 +3,11 @@ const tip = '兽人，永不为奴!点击<a href="https://17mei.com">查看</a>'
 export default async(ctx, next) => {
     const message = ctx.weixin
     console.log(message)
-    if (message.MsgType === 'event') {
+    eventHash[message.MsgType](ctx, message)
+}
+
+const eventHash = {
+    event: (ctx, message) => {
         if (message.Event === 'subscribe') {
             ctx.body = tip
         } else if (message.Event === 'unsubscribe') {
@@ -11,29 +15,33 @@ export default async(ctx, next) => {
         } else if (message.Event === 'LOCATION') {
             ctx.body = message.Latitude + ' : ' + message.Longitude
         }
-    } else if (message.MsgType === 'text') {
+    },
+    text: (ctx, message) => {
         ctx.body = message.Content
-    } else if (message.MsgType === 'image') {
+    },
+    image: (ctx, message) => {
         ctx.body = {
             type: 'image',
             mediaId: message.MediaId
         }
-    } else if (message.MsgType === 'voice') {
+    },
+    voice: (ctx, message) => {
         ctx.body = {
             type: 'voice',
             mediaId: message.MediaId
         }
-    } else if (message.MsgType === 'video') {
+    },
+    video: (ctx, message) => {
         ctx.body = {
             title: message.thumbMediaId,
             type: 'video',
             mediaId: message.MediaId
         }
-    } else if (message.MsgType === 'location') {
+    },
+    location: (ctx, message) => {
         ctx.body = message.Location_X + ' : ' + message.Location_Y + ' : ' + message.Label
-    } else if (message.MsgType === 'link') {
-        ctx.body = [{
-
-        }]
+    },
+    link: (ctx, message) => {
+        ctx.body = [{}]
     }
 }

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import config from '../config'
 import Wechat from '../wechat-lib'
-// import TokenSchema from '../database/schema/token'
+
 const Token = mongoose.model('Token')
 
 const wechatConfig = {
@@ -19,5 +19,3 @@ export const getWechat = () => {
 
     return wechatClient
 }
-
-getWechat()

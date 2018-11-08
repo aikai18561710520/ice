@@ -4,13 +4,10 @@ import * as util from './util'
 export default function(options, reply) {
     return async function wechatMiddle(ctx, next) {
         const token = options.token
-        const {
-            signature,
-            nonce,
-            timestamp,
-            echostr
-        } = ctx.query
-        const str = [token, timestamp, nonce].sort().join('')
+        const { signature, nonce, timestamp, echostr } = ctx.query
+        const str = [token, timestamp, nonce]
+            .sort()
+            .join('')
         const sha = sha1(str)
 
         if (ctx.method === 'GET') {
@@ -33,7 +30,6 @@ export default function(options, reply) {
 
             const content = await util.parseXML(data)
             const message = util.formatMessage(content.xml)
-            console.log(content)
             ctx.weixin = message
             await reply.apply(ctx, [ctx, next])
 
@@ -41,7 +37,6 @@ export default function(options, reply) {
             const msg = ctx.weixin
             const xml = util.tpl(replyBody, msg)
 
-            console.log(xml)
             ctx.status = 200
             ctx.type = 'application/xml'
             ctx.body = xml
